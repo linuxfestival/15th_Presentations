@@ -1,0 +1,303 @@
+/* Dark technical theme — cyan accents on night base */
+
+:root {
+  --bg: #0d1117;
+  --bg-card: #161b22;
+  --bg-callout: #0f172a;
+  --text: #e6edf3;
+  --text-muted: #8b949e;
+  --accent: #22d3ee;
+  --accent-dim: #0891b2;
+  --accent-glow: rgba(34, 211, 238, 0.15);
+  --danger: #f87171;
+  --success: #34d399;
+  --border: #30363d;
+}
+
+.reveal-viewport {
+  background: var(--bg);
+}
+
+.reveal {
+  font-family: "Vazirmatn", system-ui, sans-serif;
+  font-weight: 400;
+  color: var(--text);
+  direction: rtl;
+  text-align: right;
+}
+
+.reveal .slides {
+  text-align: right;
+}
+
+.reveal .slides section {
+  text-align: right;
+}
+
+/* Typography */
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4 {
+  font-family: "Vazirmatn", system-ui, sans-serif;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: none;
+  letter-spacing: 0;
+  text-shadow: none;
+  margin-bottom: 0.6em;
+}
+
+.reveal h1 {
+  font-size: 2.1em;
+  line-height: 1.25;
+}
+
+.reveal h2 {
+  font-size: 1.55em;
+  border-bottom: 2px solid var(--accent-dim);
+  padding-bottom: 0.35em;
+  display: inline-block;
+  width: auto;
+  max-width: 100%;
+}
+
+.reveal h3 {
+  font-size: 1.15em;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.reveal p,
+.reveal li {
+  font-size: 0.85em;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.reveal ul,
+.reveal ol {
+  margin-right: 0.8em;
+  margin-left: 0;
+  display: inline-block;
+  text-align: right;
+  width: 100%;
+}
+
+.reveal li {
+  margin-bottom: 0.45em;
+}
+
+.reveal li::marker {
+  color: var(--accent);
+}
+
+.reveal strong {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.reveal a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.reveal a:hover {
+  border-bottom-color: var(--accent);
+}
+
+.reveal .subtitle {
+  color: var(--text-muted);
+  font-size: 0.95em;
+  font-weight: 400;
+  margin-top: -0.4em;
+  margin-bottom: 1.2em;
+}
+
+.reveal .presenter {
+  font-size: 0.9em;
+  color: var(--text);
+  margin: 1em 0 0.8em;
+}
+
+.reveal .latin {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+  font-weight: 500;
+}
+
+/* Contact row */
+.reveal .contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2em;
+  justify-content: center;
+  margin-top: 1.2em;
+  font-size: 0.8em;
+}
+
+.reveal .contacts a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  color: var(--text);
+  padding: 0.4em 0.85em;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  direction: ltr;
+}
+
+.reveal .contacts a:hover {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+  border-bottom-color: var(--accent);
+}
+
+.reveal .contacts i {
+  color: var(--accent);
+}
+
+/* Callout cards */
+.reveal .callout {
+  background: var(--bg-callout);
+  border: 1px solid var(--border);
+  border-right: 4px solid var(--accent);
+  border-radius: 8px;
+  padding: 0.7em 1em;
+  margin: 0.9em 0;
+  font-size: 0.8em;
+  text-align: right;
+  box-shadow: 0 0 24px var(--accent-glow);
+}
+
+.reveal .callout.catch {
+  border-right-color: var(--danger);
+}
+
+.reveal .callout.success {
+  border-right-color: var(--success);
+}
+
+.reveal .callout p {
+  margin: 0;
+  font-size: 1em;
+}
+
+.reveal .quote {
+  font-size: 1em;
+  font-weight: 500;
+  color: var(--text);
+  border-right: 4px solid var(--accent);
+  padding: 0.8em 1.1em;
+  margin: 1.2em 0;
+  background: var(--accent-glow);
+  border-radius: 0 8px 8px 0;
+  line-height: 1.7;
+}
+
+/* Two-column layout */
+.reveal .cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2em;
+  text-align: right;
+  margin-top: 0.6em;
+}
+
+.reveal .cols .col {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85em 1em;
+}
+
+.reveal .cols .col h3 {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  font-size: 0.95em;
+  color: var(--accent);
+  border: none;
+}
+
+.reveal .cols .col ul {
+  margin: 0;
+  padding: 0;
+  list-style-position: inside;
+}
+
+.reveal .cols .col li {
+  font-size: 0.78em;
+  margin-bottom: 0.35em;
+}
+
+/* Title slide */
+.reveal .title-slide h1 {
+  font-size: 1.85em;
+  margin-bottom: 0.35em;
+}
+
+.reveal .title-slide .brand-line {
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  margin: 0.6em auto 1em;
+  border: none;
+}
+
+/* Progress & controls polish */
+.reveal .progress {
+  color: var(--accent);
+  height: 3px;
+}
+
+.reveal .controls {
+  color: var(--accent);
+}
+
+.reveal .slide-number {
+  font-family: "Vazirmatn", sans-serif;
+  color: var(--text-muted);
+  background: transparent;
+}
+
+/* Fragment fade */
+.reveal .fragment.visible {
+  opacity: 1;
+}
+
+/* Compact list variant */
+.reveal .compact li {
+  font-size: 0.8em;
+  margin-bottom: 0.35em;
+}
+
+/* Badge / tag */
+.reveal .tag {
+  display: inline-block;
+  font-size: 0.55em;
+  font-weight: 600;
+  color: var(--bg);
+  background: var(--accent);
+  padding: 0.15em 0.55em;
+  border-radius: 4px;
+  vertical-align: middle;
+  margin-right: 0.35em;
+}
+
+@media (max-width: 900px) {
+  .reveal .cols {
+    grid-template-columns: 1fr;
+  }
+
+  .reveal h1 {
+    font-size: 1.6em;
+  }
+
+  .reveal h2 {
+    font-size: 1.3em;
+  }
+}

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<!-- saved from url=(0037)https://talks.mparvin.me/vibe-coding/ -->
+<html lang="fa" dir="rtl" class="reveal-full-page"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open Source Tools for Vibe Coding</title>
+  <meta name="description" content="ابزارهای متن‌باز برای Vibe Coding — توسعهٔ هدایت‌شده با AI بدون دردسر">
+  <meta name="author" content="Mohammad Parvin">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link href="./The OpenSource Agent Stack_files/css2" rel="stylesheet">
+  <link rel="stylesheet" href="./The OpenSource Agent Stack_files/all.min.css">
+
+  <link rel="stylesheet" href="./The OpenSource Agent Stack_files/reset.css">
+  <link rel="stylesheet" href="./The OpenSource Agent Stack_files/reveal.css">
+  <link rel="stylesheet" href="./The OpenSource Agent Stack_files/night.css" id="theme">
+  <link rel="stylesheet" href="./The OpenSource Agent Stack_files/custom.css">
+<script defer="" referrerpolicy="origin" src="./The OpenSource Agent Stack_files/s.js"></script><script data-cfasync="false" nonce="0c152480-03f7-48fa-965c-0d0ff647829e">try{(function(w,d){!function(kP,kQ,kR,kS){if(kP.zaraz)console.error("zaraz is loaded twice");else{kP[kR]=kP[kR]||{};kP[kR].executed=[];kP.zaraz={deferred:[],listeners:[]};kP.zaraz._v="20";kP.zaraz._n="0c152480-03f7-48fa-965c-0d0ff647829e";kP.zaraz.q=[];kP.zaraz._f=function(kT){return async function(){var kU=Array.prototype.slice.call(arguments);kP.zaraz.q.push({m:kT,a:kU})}};for(const kV of["track","set","debug"])kP.zaraz[kV]=kP.zaraz._f(kV);kP.zaraz.init=()=>{var kW=kQ.getElementsByTagName(kS)[0],kX=kQ.createElement(kS),kY=kQ.getElementsByTagName("title")[0];kY&&(kP[kR].t=kQ.getElementsByTagName("title")[0].text);kP[kR].x=Math.random();kP[kR].w=kP.screen.width;kP[kR].h=kP.screen.height;kP[kR].j=kP.innerHeight;kP[kR].e=kP.innerWidth;kP[kR].l=kP.location.href;kP[kR].r=kQ.referrer;kP[kR].k=kP.screen.colorDepth;kP[kR].n=kQ.characterSet;kP[kR].o=(new Date).getTimezoneOffset();if(kP.dataLayer)for(const kZ of Object.entries(Object.entries(dataLayer).reduce((k$,la)=>({...k$[1],...la[1]}),{})))zaraz.set(kZ[0],kZ[1],{scope:"page"});kP[kR].q=[];for(;kP.zaraz.q.length;){const lb=kP.zaraz.q.shift();kP[kR].q.push(lb)}kX.defer=!0;for(const lc of[localStorage,sessionStorage])Object.keys(lc||{}).filter(le=>le.startsWith("_zaraz_")).forEach(ld=>{try{kP[kR]["z_"+ld.slice(7)]=JSON.parse(lc.getItem(ld))}catch{kP[kR]["z_"+ld.slice(7)]=lc.getItem(ld)}});kX.referrerPolicy="origin";kX.src="/cdn-cgi/zaraz/s.js?z="+btoa(encodeURIComponent(JSON.stringify(kP[kR])));kW.parentNode.insertBefore(kX,kW)};["complete","interactive"].includes(kQ.readyState)?zaraz.init():kP.addEventListener("DOMContentLoaded",zaraz.init)}}(w,d,"zarazData","script");window.zaraz._p=async kH=>new Promise(kI=>{if(kH){kH.e&&kH.e.forEach(kJ=>{try{const kK=d.querySelector("script[nonce]"),kL=kK?.nonce||kK?.getAttribute("nonce"),kM=d.createElement("script");kL&&(kM.nonce=kL);kM.innerHTML=kJ;kM.onload=()=>{d.head.removeChild(kM)};d.head.appendChild(kM)}catch(kN){console.error(`Error executing script: ${kJ}\n`,kN)}});Promise.allSettled((kH.f||[]).map(kO=>fetch(kO[0],kO[1])))}kI()});zaraz._p({"e":["(function(w,d){})(window,document)"]});})(window,document)}catch(e){throw fetch("/cdn-cgi/zaraz/t"),e;};</script><script>(function(w,d){})(window,document)</script><style type="text/css">.hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}</style><script>(function(w,d){;w.zarazData.executed.push("Pageview");})(window,document)</script><script>(function(w,d){})(window,document)</script></head>
+<body class="reveal-viewport" style="--slide-scale: 1.2768; --viewport-width: 1808px; --viewport-height: 931px; --slide-width: 960px; --slide-height: 700px;">
+  <div class="reveal slide rtl center focused has-horizontal-slides ready" role="application" data-transition-speed="default" data-background-transition="fade" style="">
+    <div class="slides" style="width: 960px; height: 700px; inset: 50% auto auto 50%; transform: translate(-50%, -50%) scale(1.2768);">
+      <section data-charset="utf-8" style="top: 96.5px; display: block;" data-markdown="" data-markdown-parsed="true" class="title-slide present"><!-- -->
+
+<h1 id="open-source-tools-for-vibe-coding">Open Source Tools for Vibe Coding</h1>
+<p class="subtitle">از ایده تا کد، با ابزارهای آزاد</p>
+
+<hr class="brand-line">
+
+<p class="presenter"><strong>محمد پروین</strong> · بنیانگذار ParsOps و PaaS2</p>
+
+<div class="contacts">
+  <a href="https://t.me/mdparvin" target="_blank" rel="noopener"><i class="fab fa-telegram"></i> @mdparvin</a>
+  <a href="https://github.com/mparvin" target="_blank" rel="noopener"><i class="fab fa-github"></i> mparvin</a>
+</div>
+
+</section><section data-charset="utf-8" style="top: 78.5px; display: block;" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="past"><h2 id="vibe-coding-چیست؟">Vibe Coding چیست؟</h2>
+<ul>
+<li>جابه‌جایی از <strong>نوشتن سینتکس</strong> به <strong>هدایت معماری</strong></li>
+<li>مفهومی که <span class="latin">Andrej Karpathy</span> مطرح کرد</li>
+<li class="fragment" data-fragment-index="0">زبان طبیعی = رابط اصلی توسعه <!-- --></li>
+</ul>
+<div class="callout fragment" data-fragment-index="1">
+  <p>نقش شما: <strong>مدیر پرامپت</strong> + <strong>بازبین سیستم</strong> — نه فقط کدنویس خط‌به‌خط</p>
+</div>
+
+</section><section data-charset="utf-8" style="top: 77.5px; display: block;" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="past"><h2 id="انقلاب-cursor">انقلاب Cursor</h2>
+<ul>
+<li>ادغام عوامل LLM داخل ادیتور</li>
+<li>جریان کاری جدید: گفتگو ← کد ← بازبینی</li>
+</ul>
+<div class="callout catch fragment" data-fragment-index="0">
+  <p><strong>اما…</strong> وابستگی به وندور · اشتراک ماهانه · نگرانی حریم خصوصی · کمتر بودن کنترل روی مدل و داده</p>
+</div>
+
+<ul>
+<li>جامعه به‌سمت <strong class="fragment" data-fragment-index="1">جایگزین‌های متن‌باز</strong> می‌رود <!-- --></li>
+</ul>
+</section><section data-charset="utf-8" style="top: 350px; display: none;" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="past"><h2 id="چرا-متنباز-برای-vibe-coding؟">چرا متن‌باز برای Vibe Coding؟</h2>
+<ul>
+<li><strong>حریم خصوصی:</strong> با مدل محلی، کد و کانتکست روی ماشین شما می‌ماند</li>
+<li><strong>BYOK:</strong> هارنس متن‌باز + مدل دلخواه — حتی مدل اختصاصی مثل <span class="latin">Claude</span></li>
+<li><span class="fragment" data-fragment-index="0">OpenRouter</span> / API ابری: انعطاف بیشتر، ولی کانتکست به provider می‌رود <!-- --></li>
+<li><strong class="fragment" data-fragment-index="1">شفافیت:</strong> کنترل پرامپت، ابزارها و جریان اجرا <!-- --></li>
+</ul>
+<div class="callout success fragment" data-fragment-index="2">
+  <p>ابزار متن‌باز به‌تنهایی کافی نیست؛ داده روی دستگاه می‌ماند فقط اگر مدل هم محلی باشد — مثلاً <span class="latin">Ollama</span></p>
+</div>
+
+</section><section data-charset="utf-8" style="top: 350px; display: none;" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="past"><h2 id="افزونههای-ide-و-ایجنتهای-ترمینال">افزونه‌های IDE و ایجنت‌های ترمینال</h2>
+<div class="cols">
+<div class="col">
+
+<h3 id="cline--roo-code">Cline &amp; Roo Code</h3>
+<ul>
+<li>افزونهٔ VS Code با Human-in-the-loop</li>
+<li>Cline: اول طرح می‌چیند، بعد پیاده‌سازی می‌کند</li>
+<li>Roo: نقش عوض می‌کند — معمار، کدنویس، یا پرسش از کدبیس</li>
+</ul>
+</div>
+<div class="col">
+
+<h3 id="aider--opencode">Aider &amp; OpenCode</h3>
+<ul>
+<li>ابزارهای CLI ترمینال‌محور</li>
+<li>Aider: auto-commit روی Git</li>
+<li>OpenCode: ایجنت ترمینال / TUI</li>
+</ul>
+</div>
+</div>
+
+</section><section data-charset="utf-8" style="top: 350px; display: none;" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="past"><h2 id="اجرای-محلی-و-سطح-سیستمعامل">اجرای محلی و سطح سیستم‌عامل</h2>
+<div class="cols">
+<div class="col">
+
+<h3 id="open-interpreter">Open Interpreter</h3>
+<ul>
+<li>کنترل OS با زبان طبیعی</li>
+<li>اجرای اسکریپت‌ها</li>
+<li>پردازش فایل‌های محلی</li>
+</ul>
+</div>
+<div class="col">
+
+<h3 id="dyad">Dyad</h3>
+<ul>
+<li>اپلیکیشن دسکتاپ native</li>
+<li>ساخت اپ محلی</li>
+<li>بازبینی امنیتی آزمایشی با AI</li>
+</ul>
+</div>
+</div>
+
+<div class="callout fragment" data-fragment-index="0">
+  <p>از کدنویسی در ادیتور تا <strong>اجرای واقعی روی ماشین</strong> — مدل می‌تواند محلی یا ابری باشد</p>
+</div>
+
+</section><section data-charset="utf-8" style="top: 350px; display: none;" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="past"><h2 id="harness-چیست؟"><span class="latin">Harness</span> چیست؟</h2>
+<ul>
+<li>مدل = <strong>مغز</strong>: فکر می‌کند و جواب می‌دهد؛ دست، ابزار و حافظهٔ بلندمدت ندارد</li>
+<li><span class="latin">Harness</span> همان لایه‌ای است که دور مدل می‌سازیم تا کار واقعی بکند</li>
+<li>شامل این‌هاست:<ul>
+<li><strong>حافظه:</strong> نشست‌ها و کانتکست قبلی</li>
+<li><strong>ابزارها:</strong> ترمینال، ویرایش فایل، جستجوی وب</li>
+<li><strong>مهارت‌ها:</strong> دستورالعمل‌های قابل‌استفادهٔ مجدد</li>
+<li><strong>یکپارچگی:</strong> CLI و پیام‌رسان‌هایی مثل Telegram و Slack</li>
+<li><strong>اجرای امن:</strong> محیط ایزوله مثل Docker یا SSH</li>
+<li><strong>حلقهٔ ایجنت:</strong> فکر ← ابزار ← نتیجه ← تکرار</li>
+</ul>
+</li>
+<li>مدل‌ها عوض می‌شوند؛ هارنسی که مال خودتان باشد حافظه، مهارت و جریان کار را نگه می‌دارد</li>
+<li>خلاصه: مدل = مغز · <span class="latin">Harness</span> = بدن و فضای کار</li>
+</ul>
+<div class="callout">
+  <p><span class="latin">Hermes Agent</span> و <span class="latin">OpenClaw</span> هر دو <span class="latin">Harness</span> متن‌باز هستند</p>
+</div>
+
+</section><section data-charset="utf-8" style="top: 350px; display: none;" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="past"><h2 id="معرفی-hermes-agent">معرفی Hermes Agent</h2>
+<p><span class="tag">Nous Research</span></p>
+<ul>
+<li>harness پایدار و متن‌باز برای ایجنت‌های خودمختار</li>
+<li>از یک نشست به نشست بعد، چیزهایی که یاد گرفته را <strong>به یاد می‌آورد</strong></li>
+<li>ساخت و نگه‌داری <strong class="fragment" data-fragment-index="0">مهارت</strong> در طول زمان <!-- --></li>
+<li class="fragment" data-fragment-index="1">کنترل کامل ابزارها و CLI <!-- --></li>
+</ul>
+<div class="callout fragment" data-fragment-index="2">
+  <p>نه فقط یک چت — یک <strong>هارنس ایجنت</strong> که یاد می‌گیرد و ماندگار می‌ماند</p>
+</div>
+
+</section><section data-charset="utf-8" style="top: 350px; display: none;" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="past"><h2 id="hermes-فراتر-از-vibe-coding">Hermes فراتر از Vibe Coding</h2>
+<ul>
+<li>ایجنت <strong>همه‌منظوره</strong> — نه فقط copilot یا افزونهٔ IDE</li>
+<li class="fragment" data-fragment-index="0">کاربردها: زیرساخت · پژوهش خودکار · کارهای OS <!-- --></li>
+<li class="fragment" data-fragment-index="1">یکپارچگی چندکاناله: بات‌های Telegram / Discord <!-- --></li>
+</ul>
+<div class="callout success fragment" data-fragment-index="2">
+  <p><strong>Local First:</strong> اجرا روی ماشین یا VPS شما — بدون تلمتری اجباری به سازنده؛ مدل می‌تواند محلی یا ابری باشد</p>
+</div>
+
+</section><section data-charset="utf-8" style="top: 350px; display: none;" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="past"><h2 id="معرفی-openclaw">معرفی OpenClaw</h2>
+<p><span class="tag">OpenClaw Foundation</span></p>
+<ul>
+<li>Gateway خودمیزبان — ایجنت روی ماشین یا سرور شما</li>
+<li>یک ایجنت، چند کانال: Telegram، Discord، Slack و پیام‌رسان‌های دیگر</li>
+<li>هر مدل: ابری یا محلی؛ بدون سرویس واسط اجباری</li>
+<li>حافظه، ابزار، مهارت و کار زمان‌بندی‌شده</li>
+</ul>
+<div class="callout fragment" data-fragment-index="0">
+  <p>متن‌باز <span class="latin">MIT</span> — هارنس همه‌منظوره، نه فقط copilot داخل ادیتور</p>
+</div>
+
+</section><section data-charset="utf-8" style="top: 350px; display: none;" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="past"><h2 id="پروژهٔ-ویژه-ai-awesome">پروژهٔ ویژه: AI-Awesome</h2>
+<ul>
+<li>مجموعهٔ curated از ابزارها، فریمورک‌ها و منابع AI / ML / DL</li>
+<li>نقطهٔ شروع عالی برای چیدن stack وایب‌کدینگ شما</li>
+</ul>
+<p style="margin: 1em 0; font-size: 0.85em;">
+  <a class="latin" href="https://github.com/MParvin/AI-Awesome" target="_blank" rel="noopener">
+    <i class="fab fa-github"></i> github.com/MParvin/AI-Awesome
+  </a>
+</p>
+
+<div class="callout success fragment" data-fragment-index="0">
+  <p>⭐ ستاره بزنید · مشارکت کنید · برای setup بعدی‌تان کاوش کنید</p>
+</div>
+
+</section><section data-charset="utf-8" style="top: 350px; display: none;" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="past"><h2 id="جمعبندی-و-پرسش">جمع‌بندی و پرسش</h2>
+<div class="quote">
+  Vibe Coding جایگزین دولوپرها نیست — آن‌ها را به <strong>معمار سیستم</strong> تبدیل می‌کند.
+</div>
+
+<h3 id="سپاس-از-توجه-شما">سپاس از توجه شما</h3>
+<div class="contacts">
+  <a href="https://t.me/mdparvin" target="_blank" rel="noopener"><i class="fab fa-telegram"></i> @mdparvin</a>
+  <a href="https://github.com/mparvin" target="_blank" rel="noopener"><i class="fab fa-github"></i> mparvin</a>
+</div>
+
+<p class="subtitle" style="margin-top: 1.2em;">سوالی دارید؟</p>
+</section>
+    </div>
+  <div class="backgrounds"><div class="slide-background title-slide present" data-loaded="true" style="display: block;"><div class="slide-background-content"></div></div><div class="slide-background past" data-loaded="true" style="display: block;"><div class="slide-background-content"></div></div><div class="slide-background past" data-loaded="true" style="display: block;"><div class="slide-background-content"></div></div><div class="slide-background past" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background past" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background past" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background past" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background past" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background past" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background past" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background past" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background past" style="display: none;"><div class="slide-background-content"></div></div></div><div class="slide-number" style="display: none;"><a href="https://talks.mparvin.me/vibe-coding/#/">
+					<span class="slide-number-a">1</span>
+					<span class="slide-number-delimiter">/</span>
+					<span class="slide-number-b">12</span>
+					</a></div><aside class="controls" data-controls-layout="bottom-right" data-controls-back-arrows="faded" style="display: block;"><button class="navigate-left enabled highlight" aria-label="next slide"><div class="controls-arrow"></div></button>
+			<button class="navigate-right" aria-label="previous slide" disabled="disabled"><div class="controls-arrow"></div></button>
+			<button class="navigate-up" aria-label="above slide" disabled="disabled"><div class="controls-arrow"></div></button>
+			<button class="navigate-down" aria-label="below slide" disabled="disabled"><div class="controls-arrow"></div></button></aside><div class="progress" style="display: block;"><span style="transform: scaleX(0);"></span></div><div class="speaker-notes" data-prevent-swipe="" tabindex="0"></div><div class="pause-overlay"><button class="resume-button">Resume presentation</button></div><div class="aria-status" aria-live="polite" aria-atomic="true" style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">Open Source Tools for Vibe Coding از ایده تا کد، با ابزارهای آزاد محمد پروین · بنیانگذار ParsOps و PaaS2 @mdparvin mparvin </div></div>
+
+  <script src="./The OpenSource Agent Stack_files/reveal.js"></script>
+  <script src="./The OpenSource Agent Stack_files/markdown.js"></script>
+  <script src="./The OpenSource Agent Stack_files/highlight.js"></script>
+  <script src="./The OpenSource Agent Stack_files/notes.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: "c/t",
+      showSlideNumber: "speaker",
+      controls: true,
+      progress: true,
+      center: true,
+      transition: "slide",
+      backgroundTransition: "fade",
+      rtl: true,
+      fragments: true,
+      plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+    });
+  </script>
+
+
+</body></html>

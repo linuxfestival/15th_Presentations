@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Potato PCs</title>
+<style>
+@font-face { font-family: "Deck Sans"; src: url("fonts/NotoSans-Regular.ttf"); font-weight: 400; }
+@font-face { font-family: "Deck Sans"; src: url("fonts/NotoSans-Bold.ttf"); font-weight: 700; }
+@font-face { font-family: "Deck Mono"; src: url("fonts/JetBrainsMono-Regular.ttf"); font-weight: 400; }
+@font-face { font-family: "Deck Mono"; src: url("fonts/JetBrainsMono-Bold.ttf"); font-weight: 700; }
+@font-face { font-family: "Deck Sans"; src: url("fonts/NotoSans-Black.ttf"); font-weight: 900; }
+:root {
+  --bg: #101216; --fg: #f3f1ec; --dim: #8d8a83; --accent: #f2b33d; --accent2: #6cc4a1;
+  --bad: #e5655b; --panel: #1a1d23; --line: #2c3038;
+  --sans: "Deck Sans", Inter, "Segoe UI", "Noto Sans", system-ui, sans-serif;
+  --fa: Vazirmatn, "Noto Sans Arabic", "Noto Naskh Arabic", Tahoma, sans-serif;
+  --mono: "Deck Mono", "JetBrains Mono", "Fira Code", "DejaVu Sans Mono", monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #000; color: var(--fg); font-family: var(--sans); overflow: hidden; }
+#deck { display: none; }
+
+/* ---------- slides: a fixed 1920x1080 canvas, scaled to fit ---------- */
+.stage { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; }
+.canvas { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: center center; }
+.slide {
+  position: absolute; inset: 0; display: none; flex-direction: column; justify-content: center; gap: 44px;
+  padding: 110px 150px; background: var(--bg); color: var(--fg); font-size: 56px; line-height: 1.25; overflow: hidden;
+}
+.slide.active, .thumb .slide { display: flex; }
+.slide.center { align-items: center; text-align: center; }
+.slide.black { background: #000; }
+.slide.full { padding: 0; }
+.slide h1 { font-size: 118px; line-height: 1.08; margin: 0; font-weight: 800; letter-spacing: -2px; }
+.slide h2 { font-size: 64px; margin: 0; font-weight: 700; color: var(--dim); }
+.big { font-size: 104px; font-weight: 800; line-height: 1.1; }
+.huge { font-size: 300px; font-weight: 900; line-height: 1; letter-spacing: -6px; }
+.label { font-size: 44px; color: var(--dim); text-transform: uppercase; letter-spacing: 4px; }
+.small { font-size: 40px; }
+.dim { color: var(--dim); }
+.accent { color: var(--accent); }
+.good { color: var(--accent2); }
+.mono { font-family: var(--mono); }
+.quote { font-size: 80px; font-weight: 700; line-height: 1.2; max-width: 1600px; }
+.quote.it { font-style: italic; font-weight: 500; font-size: 68px; }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 120px; align-items: start; }
+.stackv { display: flex; flex-direction: column; gap: 28px; }
+.row { display: flex; gap: 40px; align-items: center; }
+[data-step] { opacity: 0; transition: opacity .35s; }
+[data-step].on { opacity: 1; }
+.strike { position: relative; display: inline-block; }
+.strike > .line { position: absolute; left: -2%; right: -2%; top: 52%; height: 10px; background: var(--bad); transform-origin: left; transform: scaleX(0); transition: transform .5s; opacity: 1; }
+.strike > .line.on { transform: scaleX(1); }
+.lines li { margin: 18px 0; }
+.lines { margin: 0; padding-left: 70px; }
+code, .code { font-family: var(--mono); }
+.codebox { font-family: var(--mono); font-size: 50px; background: #000; border: 2px solid var(--line); border-radius: 18px; padding: 36px 48px; }
+
+/* media + placeholders */
+.media { position: relative; width: 100%; flex: 1; min-height: 0; border-radius: 20px; overflow: hidden; }
+.full .media { position: absolute; inset: 0; border-radius: 0; }
+.media img, .media video { width: 100%; height: 100%; object-fit: contain; display: block; background: #000; }
+.media[data-fit="cover"] img, .media[data-fit="cover"] video { object-fit: cover; }
+.credit { position: absolute; right: 16px; bottom: 12px; font-size: 22px; color: #fff; background: rgba(0,0,0,.55); padding: 4px 12px; border-radius: 6px; }
+.ph { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 22px;
+  border: 6px dashed #555; border-radius: inherit; background: repeating-linear-gradient(45deg, #171a1f, #171a1f 30px, #1c2026 30px, #1c2026 60px); text-align: center; padding: 40px; }
+.ph .k { font-size: 44px; font-weight: 800; color: var(--accent); letter-spacing: 6px; }
+.ph .l { font-size: 46px; max-width: 1400px; line-height: 1.3; }
+.ph .f { font-family: var(--mono); font-size: 34px; color: var(--dim); }
+
+/* slide-specific */
+.puzzle .big { font-size: 90px; white-space: nowrap; }
+.puzzle .rule { font-size: 92px; font-weight: 800; color: var(--accent); text-align: center; }
+.puzzle .hero { font-size: 200px; font-weight: 900; text-align: center; line-height: 1; }
+.clock { font-family: var(--mono); font-size: 200px; font-weight: 700; color: var(--accent); }
+.filename { font-family: var(--mono); font-size: 76px; word-break: break-all; line-height: 1.3; }
+.bar8 { display: flex; height: 150px; width: 100%; border-radius: 16px; overflow: hidden; font-size: 38px; font-weight: 700; }
+.bar8 > div { display: flex; align-items: center; justify-content: center; padding: 0 24px; text-align: center; line-height: 1.1; }
+.flow { display: flex; align-items: center; gap: 40px; font-size: 70px; font-weight: 800; }
+.flow .box { border: 4px solid var(--fg); border-radius: 20px; padding: 30px 50px; }
+.flow .arr { color: var(--accent); }
+table.t { border-collapse: collapse; font-size: 64px; }
+table.t th { color: var(--dim); font-weight: 600; font-size: 44px; text-align: right; padding: 10px 50px; }
+table.t th:first-child { text-align: left; }
+table.t td { padding: 22px 50px; text-align: right; border-top: 2px solid var(--line); font-variant-numeric: tabular-nums; }
+table.t td:first-child { text-align: left; color: var(--dim); }
+.disk { display: flex; height: 230px; width: 100%; border: 4px solid var(--fg); border-radius: 16px; overflow: hidden; font-size: 36px; }
+.disk .part { position: relative; display: flex; align-items: center; padding: 0 30px; }
+.disk .other { width: 14%; background: #22262e; color: var(--dim); }
+.disk .ntfs { flex: 1; background: #1d2b3a; gap: 30px; }
+.disk .ourfile { position: relative; height: 70%; flex: 0 0 52%; margin-left: auto; margin-right: 6%; background: var(--accent); color: #000; border-radius: 10px; font-weight: 800; display: flex; align-items: center; padding-left: 26px; }
+.disk .ticks { position: absolute; inset: 0; display: flex; justify-content: space-between; padding: 0 2px; pointer-events: none; }
+.disk .ticks i { width: 6px; height: 100%; background: #000; opacity: .55; position: relative; }
+.ticks.check i::after { content: "✓"; position: absolute; top: -78px; left: -14px; font-style: normal; font-size: 46px; color: var(--accent2); opacity: 0;
+  animation: tickin .25s forwards; animation-delay: calc(var(--k) * .14s + .4s); }
+@keyframes tickin { to { opacity: 1; } }
+.stack { display: flex; flex-direction: column; gap: 18px; width: 100%; }
+.layer { border-radius: 16px; padding: 26px 40px; font-size: 56px; font-weight: 800; font-family: var(--mono); display: flex; justify-content: space-between; align-items: baseline; }
+.layer span { font-family: var(--sans); font-weight: 500; font-size: 40px; opacity: .85; }
+.layer.verity { background: #3a2a5c; } .layer.clone { background: #1f4b43; } .layer.linear { background: #1d3a5c; flex: 1; }
+.layer.stick { background: #5c4a1d; width: 340px; justify-content: center; } .layer.raw { background: #22262e; color: var(--dim); }
+.stack .row { gap: 18px; }
+.bars { display: flex; flex-direction: column; gap: 46px; width: 100%; }
+.bars .b { display: grid; grid-template-columns: 420px 1fr; align-items: center; gap: 30px; }
+.bars .lab { font-size: 42px; color: var(--dim); text-align: right; line-height: 1.15; }
+.bars .bar { height: 110px; border-radius: 0 14px 14px 0; display: flex; align-items: center; padding-left: 26px; font-size: 64px; font-weight: 900; color: #000; white-space: nowrap; }
+.bigrows .r { display: grid; grid-template-columns: 1fr auto; gap: 60px; align-items: baseline; padding: 24px 0; border-bottom: 2px solid var(--line); }
+.bigrows .r .v { font-weight: 800; font-variant-numeric: tabular-nums; }
+.pills { display: flex; flex-wrap: wrap; gap: 26px; }
+.pill { border: 3px solid var(--fg); border-radius: 999px; padding: 18px 44px; font-size: 54px; font-weight: 700; }
+.house { width: 980px; height: 560px; }
+.blackout { position: fixed; inset: 0; background: #000; z-index: 50; display: none; }
+body.is-black .blackout { display: block; }
+body.idle { cursor: none; }
+
+.overlay-bottom { position: absolute; left: 0; right: 0; bottom: 0; padding: 140px 90px 60px; background: linear-gradient(transparent, rgba(0,0,0,.88)); }
+.overlay-bottom .filename { font-size: 64px; white-space: nowrap; }
+.media[data-pos] img { object-position: var(--pos); }
+</style>
+</head>
+<body>
+
+<!-- ============================ SLIDES (English) ============================
+  Each <section> is one slide; data-n matches PRESENTATION.md.
+  data-step="k" elements appear on the k-th press. data-optional slides are skipped by X.
+  Media: <div class="media" data-src="media/FILE"> loads the image; if it's missing, a placeholder says what to put there. -->
+<div id="deck">
+
+<section data-n="1" class="slide black center">
+  <div class="mono" style="font-size:64px; white-space:nowrap">* * * * *&nbsp;&nbsp; ping -c1 google.com &amp;&amp; reboot</div>
+  <div class="small dim">ACPC 2023</div>
+</section>
+
+<section data-n="2" class="slide full">
+  <div class="media" data-fit="cover" data-src="media/lab-acpc2025.jpg" data-label="The lab during ACPC 2025"></div>
+</section>
+
+<section data-n="3" class="slide puzzle">
+  <div class="cols">
+    <div class="stackv"><div class="label">World Finals wants</div><div class="big">32 GB · USB 3.2</div></div>
+    <div class="stackv"><div class="label" data-step="1">We have</div><div class="big" data-step="1">8 GB · USB 2.0</div><div class="big" data-step="2">2 cores · 8 GB RAM</div></div>
+  </div>
+  <div class="rule" data-step="3">“Don’t touch the disk.”</div>
+  <div class="hero" data-step="4">20 s</div>
+</section>
+
+<section data-n="4" class="slide">
+  <h1>How we gave a second life<br>to <span class="accent">potato PCs</span></h1>
+  <div class="small dim">Arian · ACPC image team · LinuxFest</div>
+</section>
+
+<section data-n="5" class="slide">
+  <div class="row" style="gap:100px; align-items:center">
+    <div class="media" style="flex:none; width:640px; height:860px" data-fit="cover" data-src="media/labpc-login.jpg" data-label="A lab PC at this year's login screen"></div>
+    <div class="stackv"><div class="big" style="font-size:96px">The ICPC<br>World Finals<br>image</div><div class="small dim">on one of our lab PCs</div></div>
+  </div>
+</section>
+
+<section data-n="6" class="slide">
+  <div class="stackv" style="gap:60px">
+    <div class="big"><span class="dim">1 ·</span> 2 cores · 8 GB RAM</div>
+    <div class="big" data-step="1"><span class="dim">2 ·</span> 8 GB · USB 2.0</div>
+    <div class="big accent" data-step="2"><span class="dim">3 ·</span> No installing.</div>
+  </div>
+</section>
+
+<section data-n="7" class="slide center">
+  <div class="quote">“Screw the people who built<br>last year’s image.”</div>
+</section>
+
+<section data-n="8" class="slide center">
+  <div class="huge">2024</div>
+  <div class="clock">02:00 <span class="dim" style="font-size:90px">Thursday</span></div>
+</section>
+
+<section data-n="9" class="slide center">
+  <div class="quote it">“I don’t remember changing these so I’ll move on. but the fact that <span class="accent">vmlinuz</span> was changed scares me.”</div>
+  <div class="small dim">— my notes, 2025</div>
+</section>
+
+<section data-n="10" class="slide center" data-optional>
+  <div class="codebox" style="font-size:80px; text-align:left">* * * * *&nbsp; /lol.sh<br>* * * * *&nbsp; /sudorm.sh</div>
+</section>
+
+<section data-n="11" class="slide full" data-optional>
+  <div class="media" data-fit="cover" data-src="media/hash-row.jpg" data-label="A row of lab screens, one of them full of #. Run your 2025 ping-check script on one PC with its network cable unplugged"></div>
+</section>
+
+<section data-n="12" class="slide">
+  <div class="row" style="justify-content:space-between"><div class="huge" style="font-size:220px">2025</div>
+    <div class="small accent" data-step="1" style="max-width:760px; text-align:right">CLion: evaluation licence expired</div></div>
+  <div class="media" data-src="media/sticks.jpg" data-label="A pile of USB sticks (recreating mitosis)"></div>
+</section>
+
+<section data-n="13" class="slide full">
+  <div class="media" data-fit="cover" data-src="media/wallpaper-2025.jpg" data-label="The 2025 image's desktop and wallpaper on a lab monitor"></div>
+  <div class="overlay-bottom"><div class="filename">ICPC-somethingidkidontevencareanymoreits4am</div></div>
+</section>
+
+<section data-n="14" class="slide center">
+  <div class="big" style="font-size:90px">Last year: Linux start → desktop?</div>
+  <div class="huge accent" data-step="1">7:55</div>
+</section>
+
+<section data-n="15" class="slide">
+  <h1 style="font-size:96px">Why 8 minutes?</h1>
+  <div style="font-size:64px">My 2025 guess: <span class="strike">nvidia drivers<span class="line" data-step="1"></span></span></div>
+  <div class="bar8" data-step="1">
+    <div style="width:57%; background:var(--bad); color:#000">checksum the whole stick · ~5 min</div>
+    <div style="width:31%; background:var(--accent); color:#000">installer waits for the network</div>
+    <div style="width:12%; background:#2c3038">desktop</div>
+  </div>
+</section>
+
+<section data-n="16" class="slide center">
+  <div class="huge">ACPC 2025</div>
+</section>
+
+<section data-n="17" class="slide">
+  <div class="label">My advice to next year’s team · 2025</div>
+  <ol class="lines" style="font-size:54px">
+    <li>make it from scratch … <span class="dim">turns out, they also rush things to the last minute just like us.</span></li>
+    <li>include your ssh keys</li>
+    <li>ffs, make a user per team.</li>
+    <li>do some research on netboot (PXE)</li>
+  </ol>
+</section>
+
+<section data-n="18" class="slide">
+  <h2>What’s in the official image?</h2>
+  <div class="stackv" style="gap:34px">
+    <div class="big good" style="font-size:80px" data-step="1">✓ 1,705 packages = official Ubuntu hashes</div>
+    <div class="big" style="font-size:80px" data-step="2">145 files added by hand</div>
+    <div class="big" style="font-size:80px" data-step="3">7 SSH keys for root</div>
+    <div class="big accent" style="font-size:80px" data-step="4">a CA’s private key, inside the image</div>
+  </div>
+</section>
+
+<section data-n="19" class="slide center">
+  <div class="flow"><div class="box">Ubuntu ISO</div><div class="arr">→</div><div class="box">Ansible</div><div class="arr">→</div><div class="box">image</div></div>
+  <div class="small dim">1,709 packages, the World Finals’ exact versions</div>
+  <div class="big accent" data-step="1">From scratch: 2 bugs</div>
+</section>
+
+<section data-n="20" class="slide full">
+  <div class="media" data-fit="cover" data-pos style="--pos: 50% 68%" data-src="media/stick.jpg" data-label="The 8 GB USB 2.0 stick in your hand, plain background. Take the same stick on stage"></div>
+</section>
+
+<section data-n="21" class="slide center">
+  <table class="t">
+    <tr><th></th><th>stick</th><th data-step="1">SSD</th></tr>
+    <tr><td>random 4K</td><td class="accent" style="font-size:110px; font-weight:900">6.3 MB/s</td><td data-step="1">88 MB/s</td></tr>
+    <tr data-step="1"><td>sequential</td><td>27 MB/s</td><td>430 MB/s</td></tr>
+  </table>
+</section>
+
+<section data-n="22" class="slide center">
+  <svg class="house" viewBox="0 0 980 560" aria-hidden="true">
+    <polygon points="90,230 450,40 810,230" fill="none" stroke="#f3f1ec" stroke-width="8"/>
+    <rect x="130" y="230" width="640" height="300" fill="#1d2b3a" stroke="#f3f1ec" stroke-width="8"/>
+    <rect x="160" y="260" width="180" height="120" fill="#22262e"/><rect x="360" y="260" width="180" height="120" fill="#22262e"/>
+    <rect x="160" y="400" width="380" height="110" fill="#22262e"/>
+    <rect x="560" y="260" width="190" height="250" fill="#f2b33d"/>
+    <rect x="740" y="400" width="30" height="110" fill="#101216"/>
+    <rect x="770" y="404" width="12" height="102" fill="#f2b33d"/>
+    <line x1="782" y1="455" x2="880" y2="455" stroke="#f2b33d" stroke-width="8" stroke-dasharray="16 12"/>
+    <text x="655" y="350" text-anchor="middle" font-size="34" font-weight="800" fill="#000" font-family="sans-serif">our file</text>
+    <text x="350" y="470" text-anchor="middle" font-size="30" fill="#8d8a83" font-family="sans-serif">Windows filesystem</text>
+    <text x="795" y="435" text-anchor="start" font-size="30" fill="#f2b33d" font-family="sans-serif">own door</text>
+  </svg>
+  <div class="big" style="font-size:72px">Borrow part of the Windows disk<br><span class="accent">without touching Windows.</span></div>
+</section>
+
+<section data-n="23" class="slide center">
+  <div class="big">NTFS + Linux + power cut = <span class="accent">?</span></div>
+</section>
+
+<section data-n="24" class="slide center">
+  <div class="quote" style="font-size:96px">No data but ours<br>is <span class="accent">ever</span> at risk.</div>
+</section>
+
+<section data-n="25" class="slide">
+  <div class="label">Step 1 · one file, once</div>
+  <div class="disk"><div class="part other">EFI · …</div>
+    <div class="part ntfs"><span>C: (NTFS)</span><div class="ourfile">ACPC-LIVE.img<div class="ticks"></div></div></div></div>
+  <div class="big" style="font-size:80px">13 GB · 40 s · <span class="accent">once per PC</span></div>
+</section>
+
+<section data-n="26" class="slide">
+  <div class="label">Step 2 · a fresh map at every boot</div>
+  <div class="media" data-src="media/filefrag.png" data-label="Real `filefrag -v` output for ACPC-LIVE.img (from a debug report or a debug boot). Highlight the physical_offset column"></div>
+</section>
+
+<section data-n="27" class="slide">
+  <div class="label">Step 3 · don’t trust the map either</div>
+  <div class="disk" style="margin-top:80px"><div class="part other">EFI · …</div>
+    <div class="part ntfs"><span>C: (NTFS)</span><div class="ourfile">ACPC-LIVE.img<div class="ticks check"></div></div></div></div>
+  <div class="big" style="font-size:72px">~200 labels, read from the <span class="accent">raw disk</span></div>
+</section>
+
+<section data-n="28" class="slide">
+  <div class="label">Step 4 · device-mapper</div>
+  <div class="stack">
+    <div class="layer verity" data-step="3">dm-verity <span>every block checked</span></div>
+    <div class="layer clone" data-step="2">dm-clone <span>stick → disk, in the background</span></div>
+    <div class="row"><div class="layer stick" data-step="2">stick</div><div class="layer linear" data-step="1">dm-linear <span>our file’s pieces, joined</span></div></div>
+    <div class="layer raw">raw blocks of C: <span>no filesystem, no driver</span></div>
+  </div>
+</section>
+
+<section data-n="29" class="slide">
+  <div class="label">Step 5 · pull the stick out</div>
+  <div class="big" style="font-size:88px">Copy complete → <span class="accent">nothing reads the stick</span></div>
+  <div class="small dim">prepare: once per PC, on setup day</div>
+</section>
+
+<section data-n="30" class="slide">
+  <div class="row" style="flex:1; min-height:0; align-items:stretch">
+    <div class="media" data-src="media/chkdsk.jpg" data-label="Photo of chkdsk C: ending in “found no problems” (take it at the next real-PC test)"></div>
+    <div class="stackv" style="justify-content:center; min-width:420px"><div class="huge good" style="font-size:220px">×3</div><div class="small dim">found no problems</div></div>
+  </div>
+</section>
+
+<section data-n="31" class="slide">
+  <div class="label">From Linux start</div>
+  <div class="bars">
+    <div class="b" data-step="1"><div class="lab">last year</div><div class="bar" style="width:1760px; background:var(--bad); border-radius:0">7:55</div></div>
+    <div class="b" data-step="2"><div class="lab">this year,<br>stick only</div><div class="bar" style="width:204px; background:var(--accent)">0:55</div></div>
+    <div class="b" data-step="3"><div class="lab">this year,<br>with the cache</div><div class="bar" style="width:74px; background:var(--accent2); overflow:visible">&nbsp;<span style="color:var(--accent2); margin-left:60px">0:20</span></div></div>
+  </div>
+</section>
+
+<section data-n="34" class="slide center">
+  <table class="t">
+    <tr><th></th><th>stick</th><th>cache</th></tr>
+    <tr><td>Firefox files</td><td>7.3 s</td><td class="good">1.3 s</td></tr>
+    <tr><td>all of CLion</td><td>84 s</td><td class="good">33 s</td></tr>
+    <tr><td>first g++ with bits/stdc++.h</td><td>6.7 s</td><td class="good">3.0 s</td></tr>
+    <tr class="dim" style="font-size:44px"><td>javac + java · pypy3 start</td><td>2.2 · 2.1 s</td><td>1.0 · 0.6 s</td></tr>
+  </table>
+</section>
+
+<section data-n="35" class="slide center">
+  <div class="big">12 GiB on 7.6 GiB of RAM</div>
+  <div class="big good">0 killed · 0 hangs</div>
+</section>
+
+<section data-n="36" class="slide">
+  <div class="pills"><div class="pill">one user per team</div><div class="pill">every 2 min</div><div class="pill">encrypted</div><div class="pill">stick + server</div></div>
+  <div data-step="1" class="stackv"><div class="small dim">2025:</div>
+    <div class="codebox">snprintf(path, sizeof(path), "%s_%s", username, <span class="accent">password</span>);</div></div>
+</section>
+
+<section data-n="37" class="slide">
+  <h1 style="font-size:96px">Not known yet</h1>
+  <div class="stackv" style="font-size:62px">
+    <div>HDD: ~100 seeks/s <span class="dim">· stick: ~1,500</span></div>
+    <div>UEFI · Linux lab PCs · the real backup server</div>
+    <div class="accent">the contest itself</div>
+  </div>
+</section>
+
+<section data-n="38" class="slide">
+  <h1 style="font-size:96px">A confession</h1>
+  <div class="row" style="gap:70px"><img src="media/claude.svg" alt="" style="width:300px; height:300px"><div class="big" style="font-size:150px">Claude</div></div>
+</section>
+
+<section data-n="39" class="slide">
+  <div class="cols">
+    <div class="stackv"><div class="label">2025</div><div class="quote it" style="font-size:72px">“gemini says it’s okay”</div></div>
+    <div class="stackv"><div class="label">2026</div><div class="big" style="font-size:150px">4 days</div><div class="small dim">first commit → a stick that passed every test on a real PC</div></div>
+  </div>
+</section>
+
+<section data-n="40" class="slide center">
+  <div class="small dim">What did I do?</div>
+  <div class="stackv" style="gap:40px">
+    <div class="big" data-step="1">Rules</div>
+    <div class="big" data-step="2">Real hardware</div>
+    <div class="big" data-step="3">Decisions</div>
+  </div>
+</section>
+
+<section data-n="41" class="slide center">
+  <div class="filename" style="font-size:62px; white-space:nowrap"><span class="strike">ICPC-somethingidkidontevencareanymoreits4am<span class="line" data-step="1"></span></span></div>
+</section>
+
+<section data-n="42" class="slide center">
+  <div class="row" style="gap:120px; align-items:flex-end">
+    <div class="stackv"><div class="big">Last year?</div><div class="huge" style="color:var(--bad)" data-step="1">7:55</div></div>
+    <div class="stackv"><div class="big" data-step="2">This year?</div><div class="huge good" data-step="3">0:20</div></div>
+  </div>
+</section>
+
+<section data-n="43" class="slide center" data-optional>
+  <div class="label">Still to do</div>
+  <div class="big">NTP · print · CLion licence</div>
+</section>
+
+<section data-n="44" class="slide center">
+  <div class="quote">“Screw the people who built<br>last year’s image.”</div>
+</section>
+
+<section data-n="45" class="slide full">
+  <div class="media" data-fit="cover" data-src="media/lab-acpc2025.jpg" data-label="The same lab photo as slide 2"></div>
+</section>
+
+<section data-n="46" class="slide center">
+  <h1 style="font-size:160px">Questions?</h1>
+</section>
+
+</div>
+
+<!-- ============================ THE SCREEN ============================ -->
+<div id="audience" class="stage"><div class="canvas" id="audCanvas"></div></div>
+<div class="blackout"></div>
+
+<script src="media/credits.js"></script>
+<script>
+const deck = document.getElementById('deck');
+const SL = [...deck.querySelectorAll('section.slide')];
+const N = SL.length;
+const maxStep = SL.map(s => Math.max(0, ...[...s.querySelectorAll('[data-step]')].map(e => +e.dataset.step)));
+const optional = SL.map(s => s.hasAttribute('data-optional'));
+const canvas = document.getElementById('audCanvas');
+SL.forEach(s => canvas.appendChild(s));
+
+// ticks on the disk bars
+document.querySelectorAll('.ticks').forEach(t => { for (let k = 0; k < 16; k++) { const i = document.createElement('i'); i.style.setProperty('--k', k); t.appendChild(i); } });
+
+// media: load the image, or show what should go there; credit line from media/credits.js
+document.querySelectorAll('.media').forEach(m => {
+  const src = m.dataset.src;
+  const el = document.createElement('img');
+  el.onerror = () => { m.innerHTML = `<div class="ph"><div class="k">PHOTO</div><div class="l">${m.dataset.label}</div><div class="f">slides/${src}</div></div>`; };
+  const credit = (window.CREDITS || {})[src];
+  if (credit) el.addEventListener('load', () => { const c = document.createElement('div'); c.className = 'credit'; c.textContent = credit; m.appendChild(c); });
+  el.src = src; m.appendChild(el);
+});
+
+// where you were survives a reload
+let state = { i: 0, s: 0, black: false };
+try { const saved = JSON.parse(localStorage.getItem('potato-slide')); if (saved && saved.i < N) state = saved; } catch (e) {}
+
+let shown = -1;
+function apply() {
+  if (shown !== state.i) { if (shown >= 0) SL[shown].classList.remove('active'); SL[state.i].classList.add('active'); shown = state.i; }
+  SL[state.i].querySelectorAll('[data-step]').forEach(e => e.classList.toggle('on', +e.dataset.step <= state.s));
+  document.body.classList.toggle('is-black', !!state.black);
+  const box = document.getElementById('audience');
+  const k = Math.min(box.clientWidth / 1920, box.clientHeight / 1080);
+  canvas.style.transform = `translate(-50%, -50%) scale(${k})`;
+  try { localStorage.setItem('potato-slide', JSON.stringify(state)); } catch (e) {}
+}
+function set(p) { state = { ...state, ...p }; apply(); }
+function next() { if (state.s < maxStep[state.i]) set({ s: state.s + 1 }); else if (state.i < N - 1) set({ i: state.i + 1, s: 0 }); }
+function prev() { if (state.s > 0) set({ s: state.s - 1 }); else if (state.i > 0) set({ i: state.i - 1, s: maxStep[state.i - 1] }); }
+function skip() { let i = state.i + 1; while (i < N && optional[i]) i++; if (i < N) set({ i, s: 0 }); }
+function go(n) { const i = SL.findIndex(s => +s.dataset.n === n); if (i >= 0) set({ i, s: 0 }); }
+
+// keys: Space/→/PageDown/Enter next · ←/Backspace/PageUp back · X skip optional · B black · F fullscreen
+// Home/End · type a slide number (as in PRESENTATION.md) and Enter to jump
+let digits = '';
+document.addEventListener('keydown', e => {
+  const k = e.key;
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (/^[0-9]$/.test(k)) { digits += k; return; }
+  if (k === 'Enter' && digits) { go(+digits); digits = ''; e.preventDefault(); return; }
+  if (k === 'Escape') { digits = ''; return; }
+  if ([' ', 'ArrowRight', 'ArrowDown', 'PageDown', 'Enter', 'BrowserForward'].includes(k)) { e.preventDefault(); next(); }
+  else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace', 'BrowserBack'].includes(k)) { e.preventDefault(); prev(); }
+  else if (k === 'x' || k === 'X') skip();
+  else if (k === 'b' || k === 'B' || k === '.') set({ black: !state.black });
+  else if (k === 'Home') set({ i: 0, s: 0 });
+  else if (k === 'End') set({ i: N - 1, s: 0 });
+  else if (k === 'f' || k === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {}); }
+});
+// mouse back/forward buttons, and a browser "back" that would leave the page
+let mouseNav = 0;
+document.addEventListener('mousedown', e => { if (e.button === 3 || e.button === 4) e.preventDefault(); });
+document.addEventListener('mouseup', e => { if (e.button === 3) { e.preventDefault(); mouseNav = Date.now(); prev(); } if (e.button === 4) { e.preventDefault(); mouseNav = Date.now(); next(); } });
+history.pushState({ potato: 1 }, ''); window.addEventListener('popstate', () => { history.pushState({ potato: 1 }, ''); if (Date.now() - mouseNav > 400) prev(); });
+let idle; document.addEventListener('mousemove', () => { document.body.classList.remove('idle'); clearTimeout(idle); idle = setTimeout(() => document.body.classList.add('idle'), 2000); });
+window.addEventListener('resize', apply);
+apply();
+</script>
+</body>
+</html>
