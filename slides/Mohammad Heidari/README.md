@@ -16,6 +16,6 @@ Level: Intermediate to advanced. Basic Linux command-line knowledge is sufficien
 
 [Presentation link](https://github.com/itsMohammadHeidari/aut-linuxfest-ebpf-presentation)
 
-Slides have not been added to this repository yet.
+[Slides](beyond-syscalls.pdf)
 
 [Back to all presentations](../../README.md)

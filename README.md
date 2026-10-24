@@ -27,7 +27,7 @@ Presentation titles link to individual READMEs with abstracts and available reso
 | [How to Debug a Bug You Cannot Reproduce](slides/Hooriyeh%20Maaleki/README.md) | Hooriyeh Maaleki | [Slides](slides/Hooriyeh%20Maaleki/How_to_debug_a_bug_you_cannot_reproduce.pdf) | — |
 | [Beyond the QPU: Writing Linux Drivers for Real Quantum Hardware](slides/Mohammad%20Moslemi%20Abarghan/Beyond%20the%20QPU/README.md) | Mohammad Moslemi Abarghan | — | — |
 | [Kubernetes and Cloud app](slides/Ahmad%20Rafiee/README.md) | Ahmad Rafiee | [Slides](slides/Ahmad%20Rafiee/Cloud-and-Kubernetes-App.pdf) | — |
-| [Beyond Syscalls: Inside the World of eBPF](slides/Mohammad%20Heidari/README.md) | Mohammad Heidari | — | [Link](https://github.com/itsMohammadHeidari/aut-linuxfest-ebpf-presentation) |
+| [Beyond Syscalls: Inside the World of eBPF](slides/Mohammad%20Heidari/README.md) | Mohammad Heidari | [Slides](slides/Mohammad%20Heidari/beyond-syscalls.pdf) | [Link](https://github.com/itsMohammadHeidari/aut-linuxfest-ebpf-presentation) |
 | [The Open Source Agent Stack](slides/Mehdi%20Ghalenoei/README.md) | Mehdi Ghalenoei | [Slides](slides/Mehdi%20Ghalenoei/The%20OpenSource%20Agent%20Stack.html) | [Link](http://mehdigh.xyz/agentstack/slides.html#s1) |
 | [Inside the QPU: Building Quantum Hardware Drivers on Linux](slides/Mohammad%20Moslemi%20Abarghan/Inside%20the%20QPU/README.md) | Mohammad Moslemi Abarghan | — | — |
 | [C++ Reimagined: Rediscovering the Language through C++11 to C++26](slides/Ali%20Jafarabadi/Cpp%20Reimagined/README.md) | Ali Jafarabadi | [Slides](slides/Ali%20Jafarabadi/CppReimagined.pdf) | — |
